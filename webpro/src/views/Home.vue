@@ -1,28 +1,31 @@
 <template>
   <div class="home">
-    <navbar></navbar>
-      <!--<router-link to="/about">About</router-link>-->
-    <div class="content">
-      <productList></productList>
-    </div>
-    <btmMenu></btmMenu>
+    <loadmore>
+      <div slot="body">
+        <slide></slide>
+      </div>
+    </loadmore>
+
   </div>
 </template>
 <style>
-  .content{
-    overflow:hidden;
+  .home_banner{
+    width:100%;
   }
 </style>
 <script>
-
-import navbar from '@/components/homeNavBar'
-import btmMenu from '@/components/btmMenu'
-import productList from '@/components/ProductList'
-
+import loadmore from '@/components/LoadMore'
+import slide from '@/components/Slide'
 export default {
   name: 'home',
+  created:function() {
+
+  },
   components: {
-    navbar,btmMenu,productList
-  }
+      slide,loadmore
+  },
+    methods:{
+
+    }
 }
 </script>

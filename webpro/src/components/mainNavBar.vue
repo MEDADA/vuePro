@@ -1,10 +1,7 @@
 <template>
 	<div>
 		<mu-appbar style="width: 100%;" color="primary">
-			<mu-button icon slot="left">
-				<mu-icon value="menu"></mu-icon>
-			</mu-button>
-			主页
+			<slot></slot>
 		</mu-appbar>
 	</div>
 </template>

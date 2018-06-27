@@ -8,6 +8,7 @@ var picSchema = new Schema({
   pic:Array,
   createDate:String,
   user_id:String,
+
 });
 // 将数据模型暴露出去
 module.exports = mongoose.model('pic', picSchema);

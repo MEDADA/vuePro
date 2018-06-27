@@ -6,7 +6,7 @@ var logger = require('morgan');
 
 var mongoose = require('mongoose'); //mongo DB 数据库
 
-mongoose.connect('mongodb://localhost:27017/test'); // 连接到本地数据库  （mongoDB）
+mongoose.connect('mongodb://192.168.0.55:27017/test'); // 连接到本地数据库  （mongoDB）
 
 var db = mongoose.connection;
 
@@ -29,7 +29,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 app.use(logger('dev'));
-app.use(express.json());
+app.use(express.json({'limit':'20mb'}));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
