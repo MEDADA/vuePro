@@ -11,6 +11,7 @@
 				</mu-list-item-action>
 			</mu-list-item>
 		</mu-list>
+		<div v-text="msg"></div>
 	</div>
 </template>
 
@@ -25,7 +26,8 @@
                     {category:'模特',icon:'font_download',title:'模特',total:'0'},
                     {category:'风景摄影',icon:'view_quilt',title:'风景摄影',total:'0'},
                     {category:'服装设计',icon:'local_mall',title:'服装设计',total:'0'},
-                ]
+                ],
+                msg:''
             }
         },
         created(){
@@ -35,9 +37,11 @@
 		getCategoryTotal(){
                     for(let i = 0 ; i < this.categoryList.length;i++){
                         let item = this.categoryList[i];
-                        this.$http.get('http://localhost:8888/category/'+item.category,{}).then((res)=>{
+                        this.$http.get('http://192.168.0.55:8888/category/'+item.category,{}).then((res)=>{
+                            this.msg = res;
                             this.categoryList[i].total = ''+res.body.length;
                         }).catch((error)=>{
+                            this.msg =error
                             console.log(error)
                         });
                     }

@@ -32,7 +32,7 @@
         methods:{
             getPicList:function () {
                 this.loading = true;
-                let path = this.listPath || 'http://localhost:8888/pics';
+                let path = this.listPath || 'http://192.168.0.55:8888/pics';
                 this.$http.get(path,{}).then((res) =>{
                     console.log(res.body);
                     let newArray = this.list1.concat(res.body)
