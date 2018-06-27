@@ -28,7 +28,7 @@
         name: '',
         data(){
             return {
-                path:'http://localhost:8888/productDetail/',
+                path:'http://192.168.0.55:8888/productDetail/',
                 loading:false,
                 proDetail:{}
             }
