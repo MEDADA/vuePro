@@ -19,7 +19,8 @@ import slide from '@/components/Slide'
 export default {
   name: 'home',
   created:function() {
-
+      this.$store.commit('increment')
+      console.log(this.$store.state.count)
   },
   components: {
       slide,loadmore

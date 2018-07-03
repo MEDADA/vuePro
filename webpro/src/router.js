@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Resource from 'vue-resource'
 import MuseUI from 'muse-ui'
+
 import 'muse-ui/dist/muse-ui.css'
 
 // views
@@ -16,12 +17,11 @@ import Issue from './views/Issue.vue'
 //components
 import Productdetail from './views/ProDetail.vue'
 // global var
-import globalvar from './components/globalVar.js'
-Vue.prototype.GLOBAL = globalvar;
 
 Vue.use(MuseUI)
 Vue.use(Router)
 Vue.use(Resource)
+
 
 export default new Router({
   routes: [
