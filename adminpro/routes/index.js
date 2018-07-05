@@ -4,13 +4,7 @@ var router = express.Router();
 var Pic = require('../modules/pic');
 var User = require('../modules/user');
 var Item = require('../modules/item');
-//设置跨域访问
-router.all('*', function(req, res, next) {
-    //允许跨域API
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
+
 router.post('/login', function(req, res, next) {
     let username = req.body.username;
     let password = req.body.password;

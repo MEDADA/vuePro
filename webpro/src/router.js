@@ -2,7 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Resource from 'vue-resource'
 import MuseUI from 'muse-ui'
-
+import VueSocketio from 'vue-socket.io'
+import socketio from 'socket.io-client';
 import 'muse-ui/dist/muse-ui.css'
 
 // views
@@ -14,6 +15,7 @@ import User from './views/User.vue'
 import Category from './views/Category.vue'
 import Explore from './views/Explore.vue'
 import Issue from './views/Issue.vue'
+import Dialog from './views/dialog.vue'
 //components
 import Productdetail from './views/ProDetail.vue'
 // global var
@@ -21,6 +23,8 @@ import Productdetail from './views/ProDetail.vue'
 Vue.use(MuseUI)
 Vue.use(Router)
 Vue.use(Resource)
+Vue.use(VueSocketio, socketio('http://127.0.0.1:8888/'));
+
 
 
 export default new Router({
@@ -65,6 +69,10 @@ export default new Router({
       path:'/productdetail/:id',
       name:'productdetail',
       component:Productdetail
+    },{
+      path:'/dialog',
+      name:'dialog',
+      component:Dialog,
     }
   ],
   mode:'history'
