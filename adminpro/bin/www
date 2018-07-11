@@ -34,12 +34,12 @@ io.on('connection', function(socket){
         //延迟3s返回信息给客户端
         setTimeout(function(){
             console.log('the websokcet message is'+obj);
-            socket.emit("msg", obj);
+            io.emit("msg", obj);
         },0);
 
         setTimeout(function(){
             if(obj.indexOf('你好') !== -1){
-                socket.emit("msg", '你好~~！');
+                io.emit("msg", '你好~~！');
             }
         },1000);
 

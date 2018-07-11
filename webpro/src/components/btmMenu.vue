@@ -28,6 +28,12 @@
 			value:'category',
                         replace:true
                     },{
+                        title:'好友',
+                        path:'/message',
+                        icon:'message',
+                        value:'message',
+                        replace:true
+                    },{
                         title:'发现',
                         path:'/explore',
                         icon:'explore',

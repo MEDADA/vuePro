@@ -9,6 +9,7 @@ import 'muse-ui/dist/muse-ui.css'
 // views
 import App from './views/App.vue'
 import Home from './views/Home.vue'
+import Message from './views/message.vue'
 import Login from './views/Login.vue'
 import Register from './views/Register.vue'
 import User from './views/User.vue'
@@ -42,6 +43,10 @@ export default new Router({
                 path:'/category', //分类
                 name:'category',
                 component:Category,
+            }, {
+                path:'/message', //消息
+                name:'message',
+                component:Message,
             },{
                 path:'/explore',  //发现
                 name:'explore',
@@ -75,5 +80,5 @@ export default new Router({
       component:Dialog,
     }
   ],
-  mode:'history'
+  // mode:'history'
 })

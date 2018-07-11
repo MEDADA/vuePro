@@ -31,7 +31,12 @@
                     if(res.body[0]){//                  login successfully
                         console.log(res.body[0]);
                         let userJSON = JSON.stringify(res.body[0]);
-                        window.localStorage.setItem('userData',userJSON)
+//                        window.localStorage.setItem('userData',userJSON)
+                        this.$store.commit('login',{
+                            login:true,
+                            user:res.body[0]
+                        });
+                        console.log(this.$store.state)
                         this.$router.go(-1);
                     }else if(res.body.error){ //        wrong password
                         console.log(res.body.error)

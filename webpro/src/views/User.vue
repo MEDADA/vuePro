@@ -70,17 +70,18 @@
         },
         methods:{
             userLogin(){
-                let userData = JSON.parse(window.localStorage.getItem('userData'));
+                let userData = JSON.parse(window.localStorage.getItem('userData')) || this.$store.state.user.login;
+                console.log(userData)
                 if(userData){
                     this.login = true;
-                    this.userData = userData;
+                    this.userData = this.$store.state.user.user;
                     console.log(this.userData)
                 }else{
                     this.login = false;
                 }
             },
             logout(){
-                let userData = window.localStorage.getItem('userData');
+                let userData = window.localStorage.getItem('userData') || this.$store.state.user.login;
                 if(userData){
                     window.localStorage.removeItem('userData');
                     this.$set(this,'login',false)

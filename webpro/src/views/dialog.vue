@@ -30,6 +30,9 @@
                 text:''
             }
         },
+        created(){
+            console.log(this.$store.state)
+        },
         sockets:{
 		connect: function(){
 			console.log('socket connected')
@@ -44,6 +47,15 @@
         },
         methods: {
             submitMsg:function () {
+                let obj = {
+                    username:'dada',
+                    text:this.text,
+                    id:this.$socket.id,
+                    time:{
+                        detault:Date.now()
+                    }
+                }
+                console.log(this.$socket)
                 this.$socket.emit('msg',this.text) ;
                 console.log(this.text.indexOf('你好')) ;
                 this.text = '' ;

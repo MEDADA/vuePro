@@ -24,6 +24,10 @@ const store = new Vuex.Store({
         },
         loading(state){
             state.loading = !state.loading;
+        },
+        login(state,user){
+            state.user = user;
+            state.user.login = true;
         }
     }
 });
