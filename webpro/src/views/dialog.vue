@@ -7,8 +7,8 @@
 						<img src="https://wallpapers.wallhaven.cc/wallpapers/thumb/small/th-661501.jpg" alt="">
 					</div>
 					<div class="dialog_item_info">
-						<div class="dialog_item_name">DADA</div>
-						<div class="dialog_item_text" v-text="msg"></div>
+						<div class="dialog_item_name" v-text="user.name"></div>
+						<div class="dialog_item_text" v-text="msg">123</div>
 					</div>
 				</div>
 			</transition-group>
@@ -27,26 +27,33 @@
             return {
                 id:'',
                 message:[],
-                text:''
+                text:'',
+                user:{}
             }
         },
         created(){
             console.log(this.$store.state)
+            this.loginCheck()
         },
         sockets:{
 		connect: function(){
 			console.log('socket connected')
-		    this.$socket.on('msg',(result) => {
-		        console.log(result)
-		        this.message.push(result)
-		    })
+			    this.$socket.on('msg',(result) => {
+			        console.log(result)
+			        this.message.push(result)
+			    })
 		},
 		customEmit: function(val){
 			console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
 		},
         },
         methods: {
-            submitMsg:function () {
+            loginCheck:function(){
+                if(!this.$store.state.user.login        ){
+                    this.$router.push('/login')
+                }
+            },
+            submitMsg:function() {
                 let obj = {
                     username:'dada',
                     text:this.text,
@@ -55,9 +62,8 @@
                         detault:Date.now()
                     }
                 }
-                console.log(this.$socket)
-                this.$socket.emit('msg',this.text) ;
-                console.log(this.text.indexOf('你好')) ;
+                this.$socket.emit('msg',this.text);
+
                 this.text = '' ;
             },
         }
