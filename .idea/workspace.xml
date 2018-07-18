@@ -3,9 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="2111716e-b7b6-42f7-9d5c-2c2acc13191b" name="默认的" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webpro/src/views/Login.vue" afterPath="$PROJECT_DIR$/webpro/src/views/Login.vue" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webpro/src/views/dialog.vue" afterPath="$PROJECT_DIR$/webpro/src/views/dialog.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/webpro/src/views/message.vue" afterPath="$PROJECT_DIR$/webpro/src/views/message.vue" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -57,21 +55,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="dialog.vue" pinned="false" current-in-tab="true">
+      <file leaf-file-name="dialog.vue" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/webpro/src/views/dialog.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="384">
-              <caret line="41" column="51" lean-forward="true" selection-start-line="41" selection-start-column="51" selection-end-line="41" selection-end-column="51" />
+            <state relative-caret-position="432">
+              <caret line="43" column="30" lean-forward="true" selection-start-line="43" selection-start-column="30" selection-end-line="43" selection-end-column="30" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="www" pinned="false" current-in-tab="false">
+      <file leaf-file-name="www" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/adminpro/bin/www">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="456">
-              <caret line="41" column="23" lean-forward="false" selection-start-line="41" selection-start-column="19" selection-end-line="41" selection-end-column="23" />
+            <state relative-caret-position="240">
+              <caret line="32" column="36" lean-forward="true" selection-start-line="32" selection-start-column="36" selection-end-line="32" selection-end-column="36" />
               <folding />
             </state>
           </provider>
@@ -802,7 +800,7 @@
       <workItem from="1531442142501" duration="3976000" />
       <workItem from="1531701991159" duration="2272000" />
       <workItem from="1531788472577" duration="1337000" />
-      <workItem from="1531874058203" duration="7966000" />
+      <workItem from="1531874058203" duration="9162000" />
     </task>
     <task id="LOCAL-00001" summary="6.27">
       <created>1530083677476</created>
@@ -853,11 +851,18 @@
       <option name="project" value="LOCAL" />
       <updated>1531894440991</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="7.18">
+      <created>1531903026759</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1531903026759</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="294619000" />
+    <option name="totallyTimeSpent" value="295815000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1233,14 +1238,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/adminpro/bin/www">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="456">
-          <caret line="41" column="23" lean-forward="false" selection-start-line="41" selection-start-column="19" selection-end-line="41" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/adminpro/routes/index.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
@@ -1278,8 +1275,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/webpro/src/views/dialog.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="384">
-          <caret line="41" column="51" lean-forward="true" selection-start-line="41" selection-start-column="51" selection-end-line="41" selection-end-column="51" />
+        <state relative-caret-position="432">
+          <caret line="43" column="30" lean-forward="true" selection-start-line="43" selection-start-column="30" selection-end-line="43" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/adminpro/bin/www">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="32" column="36" lean-forward="true" selection-start-line="32" selection-start-column="36" selection-end-line="32" selection-end-column="36" />
           <folding />
         </state>
       </provider>

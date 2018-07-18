@@ -33,7 +33,7 @@
         },
         created(){
             console.log(this.$store.state)
-            this.$socket.emit('connect')
+            this.$socket.emit('connect','1')
         },
         sockets:{
 		connect: function(){
@@ -42,6 +42,7 @@
 			        console.log(result)
 			        this.message.push(result)
 			    })
+		        console.log(this.$socket.id)
 		},
 		customEmit: function(val){
 			console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
