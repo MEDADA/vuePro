@@ -39,6 +39,18 @@
                     }
                 ]
             }
+        },
+        created(){
+            this.loginCheck();
+        },
+        methods:{
+            loginCheck:function(){
+                if(!this.$store.state.user.login){
+                    this.$router.push('/login')
+                }else{
+                    console.log('已登录'+this.$store.state.user.name)
+                }
+            }
         }
     }
 </script>

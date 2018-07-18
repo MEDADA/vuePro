@@ -28,12 +28,12 @@
                 id:'',
                 message:[],
                 text:'',
-                user:{}
+                user:{},
             }
         },
         created(){
             console.log(this.$store.state)
-            this.loginCheck()
+            this.$socket.emit('connect')
         },
         sockets:{
 		connect: function(){
@@ -48,11 +48,7 @@
 		},
         },
         methods: {
-            loginCheck:function(){
-                if(!this.$store.state.user.login        ){
-                    this.$router.push('/login')
-                }
-            },
+
             submitMsg:function() {
                 let obj = {
                     username:'dada',
