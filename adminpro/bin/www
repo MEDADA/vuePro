@@ -21,7 +21,7 @@ app.set('port', port);
 
 var server = http.createServer(app);
 
-var io = require('socket.io')(server)
+var io = require('socket.io')(server);
 /**
  * Listen on provided port, on all network interfaces.
  */
@@ -33,25 +33,12 @@ io.on('connection', function(socket){
     socket.on("msg", function(obj) {
         //延迟3s返回信息给客户端
         setTimeout(function(){
-            console.log('the websokcet message is'+obj);
-            io.emit("msg", obj);
+            let id = obj.id;
+            io.emit("msg"+id, obj);
+            console.log('the websokcet message is'+obj.text);
+            console.log('open connect:'+obj.id)
         },0);
-
-        setTimeout(function(){
-            if(obj.indexOf('你好') !== -1){
-                io.emit("msg", '你好~~！');
-            }
-        },1000);
-
     });
-    // timer = setInterval(function () {//定时器每五秒发一次
-    //     socket.emit('login', {//触发emit,前端接收
-    //         "Action": "DataRecv",
-    //         "Data": {
-    //             "Reporting_mode": {"T":"I","V":5},
-    //         }
-    //     });
-    // },3000)
 });
 
 server.listen(port);

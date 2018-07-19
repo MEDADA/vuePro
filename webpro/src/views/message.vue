@@ -1,8 +1,8 @@
 <template>
 	<div>
 		<mu-list>
-			<router-link to="dialog">
-				<mu-list-item avatar button :ripple="true" v-for="friend in friends">
+			<router-link  v-for="friend in friends" :to="{path:'dialog', query:{ChatRoomId:friend.chatRoomId}}" >
+				<mu-list-item avatar button :ripple="true">
 					<mu-list-item-action>
 						<mu-avatar>
 							<img :src="friend.pic">
@@ -25,8 +25,9 @@
             return {
                 friends:[
                     {
-                        name:'Mike',
+                        name:'chat room 001',
                         pic:'',
+			chatRoomId:'-n1JLcFjCd7ay26aAAAM'
                     },{
                         name:'DADA',
                         pic:'',
@@ -48,7 +49,7 @@
                 if(!this.$store.state.user.login){
                     this.$router.push('/login')
                 }else{
-                    console.log('已登录'+this.$store.state.user.name)
+                    console.log('已登录'+this.$store.state.user.username)
                 }
             }
         }

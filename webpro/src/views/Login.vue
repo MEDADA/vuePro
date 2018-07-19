@@ -37,7 +37,6 @@
                             user:res.body[0]
                         });
                         console.log(this.$store.state);
-                        console.log(this.$router.go(-1));
                         this.$router.go(-1);
                     }else if(res.body.error){ //        wrong password
                         console.log(res.body.error)

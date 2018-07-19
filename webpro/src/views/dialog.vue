@@ -2,13 +2,13 @@
 	<div>
 		<div class="dialog_container">
 			<transition-group tag="div" name="dialogItem">
-				<div class="dialog_item" v-for="msg in message"  v-bind:key="msg">
+				<div class="dialog_item" :class="{self:msg.username == $store.state.user.user.username}" v-for="msg in message" :key="msg.text">
 					<div class="dialog_item_pic">
-						<img src="https://wallpapers.wallhaven.cc/wallpapers/thumb/small/th-661501.jpg" alt="">
+						<img :src="msg.pic" alt="">
 					</div>
 					<div class="dialog_item_info">
-						<div class="dialog_item_name" v-text="user.name"></div>
-						<div class="dialog_item_text" v-text="msg">123</div>
+						<div class="dialog_item_name" v-text="msg.username"></div>
+						<div class="dialog_item_text" v-text="msg.text"></div>
 					</div>
 				</div>
 			</transition-group>
@@ -32,17 +32,21 @@
             }
         },
         created(){
-            console.log(this.$store.state)
-            this.$socket.emit('connect','1')
+            console.log(this.$store.state);
+            console.log(this.$route.query.ChatRoomId);
+            this.$socket.emit('connect');
         },
         sockets:{
 		connect: function(){
 			console.log('socket connected')
-			    this.$socket.on('msg',(result) => {
-			        console.log(result)
-			        this.message.push(result)
-			    })
-		        console.log(this.$socket.id)
+		    this.$socket.on('msg'+this.$route.query.ChatRoomId,(result) => {
+		        let obj = {};
+		        obj.pic = result.pic;
+		        obj.username = result.username;
+		        obj.text = result.text;
+		        obj.id = result.id;
+		        this.message.push(obj)
+		    });
 		},
 		customEmit: function(val){
 			console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
@@ -52,15 +56,15 @@
 
             submitMsg:function() {
                 let obj = {
-                    username:'dada',
+                    username:this.$store.state.user.user.username,
+                    pic:this.$store.state.user.user.pic,
                     text:this.text,
-                    id:this.$socket.id,
+                    id:this.$route.query.ChatRoomId || this.$socket.id,
                     time:{
                         detault:Date.now()
                     }
                 }
-                this.$socket.emit('msg',this.text);
-
+                this.$socket.emit('msg',obj);
                 this.text = '' ;
             },
         }
@@ -100,6 +104,22 @@
 		opacity:1;
 		overflow:hidden;
 	}
+	.self{
+
+	}
+	.self .dialog_item_pic{
+		float:right;
+	}
+	.self .dialog_item_info{
+		float:right;
+	}
+	.self .dialog_item_name{
+		text-align: right;
+	}
+	.self .dialog_item_text{
+		background-color: deepskyblue;
+		color:#fff;
+	}
 	.dialog_item_pic{
 		margin-left: 2vw;
 		margin-right:2vw;
@@ -109,6 +129,9 @@
 		background-color: #fff;
 		overflow:hidden;
 		text-align: center;
+		position:relative;
+		left:0;
+		top:0;
 	}
 	.dialog_item_pic img{
 		height:100%;
