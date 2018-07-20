@@ -37,7 +37,9 @@
                             user:res.body[0]
                         });
                         console.log(this.$store.state);
-                        this.$router.go(-1);
+                        setTimeout(function () {
+                            window.history.go(-1)
+                        },0)
                     }else if(res.body.error){ //        wrong password
                         console.log(res.body.error)
                     }else{   //                         You don't exist.

@@ -24,7 +24,7 @@ import Productdetail from './views/ProDetail.vue'
 Vue.use(MuseUI)
 Vue.use(Router)
 Vue.use(Resource)
-Vue.use(VueSocketio, socketio('http://127.0.0.1:8888/'));
+Vue.use(VueSocketio, socketio('http://192.168.0.55:8888/'));
 
 
 

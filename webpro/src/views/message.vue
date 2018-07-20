@@ -49,7 +49,7 @@
                 if(!this.$store.state.user.login){
                     this.$router.push('/login')
                 }else{
-                    console.log('已登录'+this.$store.state.user.username)
+                    console.log('已登录'+this.$store.state.user.user.username)
                 }
             }
         }

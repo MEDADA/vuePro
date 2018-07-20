@@ -2,7 +2,7 @@
 	<div>
 		<div class="dialog_container">
 			<transition-group tag="div" name="dialogItem">
-				<div class="dialog_item" :class="{self:msg.username == $store.state.user.user.username}" v-for="msg in message" :key="msg.text">
+				<div class="dialog_item" :class="{self:msg.userid == $store.state.user.user._id}" v-for="(msg,ind) in message" :key="ind">
 					<div class="dialog_item_pic">
 						<img :src="msg.pic" alt="">
 					</div>
@@ -39,12 +39,14 @@
         sockets:{
 		connect: function(){
 			console.log('socket connected')
+
 		    this.$socket.on('msg'+this.$route.query.ChatRoomId,(result) => {
 		        let obj = {};
 		        obj.pic = result.pic;
 		        obj.username = result.username;
 		        obj.text = result.text;
 		        obj.id = result.id;
+		        obj.userid = result.userid;
 		        this.message.push(obj)
 		    });
 		},
@@ -59,6 +61,7 @@
                     username:this.$store.state.user.user.username,
                     pic:this.$store.state.user.user.pic,
                     text:this.text,
+                    userid:this.$store.state.user.user._id,
                     id:this.$route.query.ChatRoomId || this.$socket.id,
                     time:{
                         detault:Date.now()
@@ -83,7 +86,7 @@
 	}
 	.input_box .mu-input{
 		margin-bottom:0;
-		width:calc(100% - 30vw);
+		width:calc(100% - 35vw);
 		min-height:50px;
 		margin-left:5vw;
 	}
