@@ -9,6 +9,7 @@ var userSchema = new Schema({
     birthday:String,
     sex:String,
     pic:String,
+    friendList:Array,
 });
 // 将数据模型暴露出去
 module.exports = mongoose.model('user', userSchema);

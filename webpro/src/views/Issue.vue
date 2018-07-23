@@ -62,18 +62,9 @@
             }
         },
         created(){
-            this.checkLogin()
-            console.log(this.GLOBAL.globalUser)
+            this.$userLogin()
         },
         methods: {
-            checkLogin(){
-                let userData = JSON.parse(window.localStorage.getItem('userData'));
-                if (userData) {
-                    console.log('欢迎你,' + userData.username)
-                } else {
-                    this.$router.push('/login')
-                }
-            },
             setFiles(file){
                 if (this.form.files.length < 4) {
                     this.form.files.push(file)
@@ -91,7 +82,7 @@
                 this.getDate();
                 let path = 'http://192.168.0.55:8888/issue';
                 let params = {
-                    user:this.GLOBAL.globalUser.username,
+                    user:this.$store.state.user.user.username,
                     createDate:this.createDate,
                     text:this.form.text,
                     pic:this.form.files,

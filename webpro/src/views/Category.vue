@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<mu-list>
-			<mu-list-item button :ripple="false" v-for="item in categoryList">
+			<mu-list-item button :ripple="false" v-for="item in categoryList" :to="{path:'/proList',query:{category:encodeURI(item.category)}}">
 				<mu-list-item-action>
 					<mu-icon :value="item.icon"></mu-icon>
 				</mu-list-item-action>
@@ -33,14 +33,14 @@
         },
         methods:{
 		getCategoryTotal(){
-                    for(let i = 0 ; i < this.categoryList.length;i++){
-                        let item = this.categoryList[i];
-                        this.$http.get('http://192.168.0.55:8888/category/'+item.category,{}).then((res)=>{
-                            this.categoryList[i].total = ''+res.body.length;
-                        }).catch((error)=>{
-                            console.log(error)
-                        });
-                    }
+	            for(let i = 0 ; i < this.categoryList.length;i++){
+	                let item = this.categoryList[i];
+	                this.$http.get('http://192.168.0.55:8888/category/'+item.category,{}).then((res)=>{
+	                    this.categoryList[i].total = ''+res.body.length;
+	                }).catch((error)=>{
+	                    console.log(error)
+	                });
+	            }
 		}
         },components:{
 

@@ -50,12 +50,17 @@ router.get('/userReleaseList',function (req,res,next) {
         res.send(json)
     });
 });
+router.get('/userReleaseList/:param',function (req,res,next) {
+    Item.find({category:decodeURI(req.params.param)},function (err,json) {
+        if(err) throw err;
+        res.send(json)
+    });
+});
 router.get('/userReleaseDetail/:id',function (req,res,next) {
-    res.send(req)
-    // Item.find({_id:req.body.params},function (err,json) {
-    //     if(err) throw err;
-    //     res.send(json)
-    // });
+    Item.find({_id:req.params.id},function (err,json) {
+        if(err) throw err;
+        res.send(json)
+    });
 });
 /* GET home page. */
 router.get('/', function(req, res, next) {

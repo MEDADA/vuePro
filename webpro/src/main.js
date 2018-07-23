@@ -2,10 +2,11 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import App from './App.vue'
 import router from './router'
-
+import globalAPI from './assets/js/globalAPI'
 Vue.config.productionTip = false;
 
 Vue.use(Vuex);
+Vue.use(globalAPI);
 
 const store = new Vuex.Store({
     state: {
@@ -20,14 +21,14 @@ const store = new Vuex.Store({
     },
     mutations: {
         increment (state) {
-            state.count++
+            state.count++ ;
         },
         loading(state){
-            state.loading = !state.loading;
+            state.loading = !state.loading ;
         },
         login(state,user){
-            state.user = user;
-            state.user.login = true;
+            state.user = user ;
+            state.user.login = true ;
         }
     }
 });

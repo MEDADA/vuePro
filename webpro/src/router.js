@@ -17,6 +17,7 @@ import Category from './views/Category.vue'
 import Explore from './views/Explore.vue'
 import Issue from './views/Issue.vue'
 import Dialog from './views/dialog.vue'
+import ProList from './views/ProList.vue'
 //components
 import Productdetail from './views/ProDetail.vue'
 // global var
@@ -78,6 +79,10 @@ export default new Router({
       path:'/dialog',
       name:'dialog',
       component:Dialog,
+    },{
+      path:'/proList',
+      name:'proList',
+      component:ProList,
     }
   ],
   // mode:'history'

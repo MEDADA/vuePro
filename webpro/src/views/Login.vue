@@ -29,14 +29,12 @@
                 let path = 'http://192.168.0.55:8888/login';
                 this.$http.post(path,{username:this.form.username,password:this.form.password}).then((res) =>{
                     if(res.body[0]){//                  login successfully
-                        console.log(res.body[0]);
                         let userJSON = JSON.stringify(res.body[0]);
-//                        window.localStorage.setItem('userData',userJSON)
-                        this.$store.commit('login',{
+                        this.$store.commit('login',{  //登录成功信息存入 vuex
                             login:true,
                             user:res.body[0]
                         });
-                        console.log(this.$store.state);
+                        window.localStorage.setItem('userData',JSON.stringify(this.$store.state.user));  //登录成功信息存入本地缓存
                         setTimeout(function () {
                             window.history.go(-1)
                         },0)

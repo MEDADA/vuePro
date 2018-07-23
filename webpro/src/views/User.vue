@@ -2,35 +2,35 @@
 	<div>
 		<mu-container>
 		<mu-list>
-			<mu-list-item button :ripple="false"  v-if="login">
+			<mu-list-item button :ripple="true"  v-if="$store.state.user.login">
 				<mu-list-item-action>
 					<mu-avatar>
-						<img :src="userData.pic">
+						<img :src="$store.state.user.user.pic">
 					</mu-avatar>
 				</mu-list-item-action>
-				<mu-list-item-title v-text="userData.username"></mu-list-item-title>
+				<mu-list-item-title v-text="$store.state.user.user.username"></mu-list-item-title>
 			</mu-list-item>
-			<mu-list-item v-if="!login"  button :ripple="false">
+			<mu-list-item v-if="!$store.state.user.login"  button :ripple="true" to="/login">
 				<mu-list-item-action>
 					<mu-icon value="grade"></mu-icon>
 				</mu-list-item-action>
-				<router-link to="/login"><mu-list-item-title>登录</mu-list-item-title></router-link>
+				<mu-list-item-title>登录</mu-list-item-title>
 			</mu-list-item>
 			<mu-divider></mu-divider>
-			<mu-list-item button :ripple="false">
+			<mu-list-item button :ripple="true" to="/issue">
 				<mu-list-item-action>
 					<mu-icon value="grade"></mu-icon>
 				</mu-list-item-action>
-				<router-link to="/issue"><mu-list-item-title>发布</mu-list-item-title></router-link>
+				<mu-list-item-title>发布</mu-list-item-title>
 			</mu-list-item>
-			<mu-list-item button :ripple="false">
+			<mu-list-item button :ripple="true">
 				<mu-list-item-action>
 					<mu-icon value="send"></mu-icon>
 				</mu-list-item-action>
 				<mu-list-item-title>我的发布</mu-list-item-title>
 			</mu-list-item>
 			<mu-divider></mu-divider>
-			<mu-list-item button :ripple="false" @click="logout()">
+			<mu-list-item button :ripple="true" @click="$userLoginOut()">
 				<mu-list-item-action>
 					<mu-icon value="power_settings_new"></mu-icon>
 				</mu-list-item-action>
@@ -52,42 +52,19 @@
         data(){
             return {
                 login:true,
-                userData:{
-
-                },
+                userData:{},
                 color: {
                     color: 'success',
                     message: '退出登录,成功！',
                     open: false,
                     timeout: 3000
-                }
+                },
             }
         },
         created(){
-            this.userLogin();
-            this.$store.commit('increment')
-            console.log(this.$store.state.count)
+            this.$userLogin()
         },
         methods:{
-            userLogin(){
-                let userData = JSON.parse(window.localStorage.getItem('userData')) || this.$store.state.user.login;
-                console.log(userData)
-                if(userData){
-                    this.login = true;
-                    this.userData = this.$store.state.user.user;
-                    console.log(this.userData)
-                }else{
-                    this.login = false;
-                }
-            },
-            logout(){
-                let userData = window.localStorage.getItem('userData') || this.$store.state.user.login;
-                if(userData){
-                    window.localStorage.removeItem('userData');
-                    this.$set(this,'login',false)
-                    this.openColorSnackbar();
-                }
-            },
             openColorSnackbar () {
                 if (this.color.timer) clearTimeout(this.color.timer);
                 this.color.open = true;
