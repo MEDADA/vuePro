@@ -55,5 +55,8 @@ GlobalAPI.install = function (Vue, options) {
                 this.$store.commit('login',{'login':false});
             }
     }
+    Vue.prototype.$goBack = function () {
+        this.$router.go(-1);  //后退
+    }
 };
 module.exports = GlobalAPI ;

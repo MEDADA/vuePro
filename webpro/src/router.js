@@ -18,6 +18,7 @@ import Explore from './views/Explore.vue'
 import Issue from './views/Issue.vue'
 import Dialog from './views/dialog.vue'
 import ProList from './views/ProList.vue'
+import AddFriend from './views/AddFriend.vue'
 //components
 import Productdetail from './views/ProDetail.vue'
 // global var
@@ -83,6 +84,10 @@ export default new Router({
       path:'/proList',
       name:'proList',
       component:ProList,
+    },{
+      path:'/addFriend',
+      name:'addFriend',
+      component:AddFriend
     }
   ],
   // mode:'history'

@@ -1,5 +1,7 @@
 <template>
 	<div>
+
+		<navbar>{{$store.state.user.user.username}}</navbar>
 		<div class="dialog_container">
 			<transition-group tag="div" name="dialogItem">
 				<div class="dialog_item" :class="{self:msg.userid == $store.state.user.user._id}" v-for="(msg,ind) in message" :key="ind">
@@ -21,6 +23,7 @@
 </template>
 
 <script>
+	import navbar from '@/components/navBar.vue'
     export default{
         name: '',
         data(){
@@ -29,26 +32,29 @@
                 message:[],
                 text:'',
                 user:{},
+                connect:false
             }
         },
         created(){
-            console.log(this.$store.state);
+            this.$userLogin();
             console.log(this.$route.query.ChatRoomId);
             this.$socket.emit('connect');
         },
         sockets:{
 		connect: function(){
+		    if(!this.connect){
 			console.log('socket connected')
-
-		    this.$socket.on('msg'+this.$route.query.ChatRoomId,(result) => {
-		        let obj = {};
-		        obj.pic = result.pic;
-		        obj.username = result.username;
-		        obj.text = result.text;
-		        obj.id = result.id;
-		        obj.userid = result.userid;
-		        this.message.push(obj)
-		    });
+                        this.connect = true;
+			    this.$socket.on('msg'+this.$route.query.ChatRoomId,(result) => {
+			        let obj = {};
+			        obj.pic = result.pic;
+			        obj.username = result.username;
+			        obj.text = result.text;
+			        obj.id = result.id;
+			        obj.userid = result.userid;
+			        this.message.push(obj)
+			    });
+                    }
 		},
 		customEmit: function(val){
 			console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
@@ -66,10 +72,13 @@
                     time:{
                         detault:Date.now()
                     }
-                }
+                };
                 this.$socket.emit('msg',obj);
                 this.text = '' ;
             },
+        },
+        components:{
+            navbar
         }
     }
 </script>
