@@ -31,9 +31,10 @@ io.on('connection', function(socket){
         console.log("有用户断开连接");
     });
     socket.on("msg", function(obj) {
-        //延迟3s返回信息给客户端
+        //返回信息给客户端
         setTimeout(function(){
             let id = obj.id;
+            let user2 = obj.userid2;
             io.emit("msg"+id, obj);
             console.log('the websokcet message is'+obj.text);
             console.log('open connect:'+obj.id)

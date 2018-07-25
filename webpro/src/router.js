@@ -19,6 +19,7 @@ import Issue from './views/Issue.vue'
 import Dialog from './views/dialog.vue'
 import ProList from './views/ProList.vue'
 import AddFriend from './views/AddFriend.vue'
+import UserDetail from './views/UserDetail.vue'
 //components
 import Productdetail from './views/ProDetail.vue'
 // global var
@@ -88,7 +89,11 @@ export default new Router({
       path:'/addFriend',
       name:'addFriend',
       component:AddFriend
-    }
+    },{
+          path:'/userDetail',  //用户
+          name:'userDetail',
+          component:UserDetail
+      }
   ],
   // mode:'history'
 })

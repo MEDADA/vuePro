@@ -1,16 +1,17 @@
 <template>
 	<div>
 
-		<navbar>{{$store.state.user.user.username}}</navbar>
+		<navbar>{{toUser.username}}</navbar>
 		<div class="dialog_container">
+			<div class="dialog_item_tips">已发起对XXX聊天 连接通道为 : {{chatRoomId}}</div>
 			<transition-group tag="div" name="dialogItem">
 				<div class="dialog_item" :class="{self:msg.userid == $store.state.user.user._id}" v-for="(msg,ind) in message" :key="ind">
-					<div class="dialog_item_pic">
+					<div class="dialog_item_pic" v-if="msg.pic">
 						<img :src="msg.pic" alt="">
 					</div>
 					<div class="dialog_item_info">
-						<div class="dialog_item_name" v-text="msg.username"></div>
-						<div class="dialog_item_text" v-text="msg.text"></div>
+						<div class="dialog_item_name" v-text="msg.username" v-if="msg.username"></div>
+						<div class="dialog_item_text" v-text="msg.text" v-if="msg.text"></div>
 					</div>
 				</div>
 			</transition-group>
@@ -28,10 +29,13 @@
         name: '',
         data(){
             return {
-                id:'',
+                chatRoomId:'',
                 message:[],
                 text:'',
                 user:{},
+                toUser:{
+
+                },
                 connect:false
             }
         },
@@ -39,21 +43,33 @@
             this.$userLogin();
             console.log(this.$route.query.ChatRoomId);
             this.$socket.emit('connect');
+//            发送chatid 给friendList chatid
+
         },
         sockets:{
 		connect: function(){
 		    if(!this.connect){
 			console.log('socket connected')
+		        if(!this.$route.query.ChatRoomId || this.$route.query.ChatRoomId !== null){
+                            this.chatRoomId = this.$socket.id;
+		        } else{
+                            this.chatRoomId = this.$route.query.ChatRoomId;
+		        }
+		        console.log('??????????????'+this.chatRoomId)
                         this.connect = true;
-			    this.$socket.on('msg'+this.$route.query.ChatRoomId,(result) => {
-			        let obj = {};
-			        obj.pic = result.pic;
-			        obj.username = result.username;
-			        obj.text = result.text;
-			        obj.id = result.id;
-			        obj.userid = result.userid;
-			        this.message.push(obj)
-			    });
+			if(this.chatRoomId){
+                            this.$socket.on('msg'+this.chatRoomId,(result) => {
+                                let obj = {
+	                                text : result.text,
+	                                id : result.id,
+	                            }
+                                this.message.push(obj)
+                            });
+			}
+                        this.getUserData();
+
+
+                        this.creatChatRecord();
                     }
 		},
 		customEmit: function(val){
@@ -62,13 +78,12 @@
         },
         methods: {
 
-            submitMsg:function() {
+            submitMsg() {
                 let obj = {
-                    username:this.$store.state.user.user.username,
-                    pic:this.$store.state.user.user.pic,
                     text:this.text,
                     userid:this.$store.state.user.user._id,
-                    id:this.$route.query.ChatRoomId || this.$socket.id,
+                    userid2:this.$route.query.userid,
+                    id:this.chatRoomId,
                     time:{
                         detault:Date.now()
                     }
@@ -76,6 +91,51 @@
                 this.$socket.emit('msg',obj);
                 this.text = '' ;
             },
+            getUserData(){
+                this.$http.get('http://192.168.0.55:8888/getUserId/'+this.$route.query.userid, {}).then((res) => {
+                    console.log(res.body);
+                    this.toUser = res.body;
+                    this.saveDialog();
+                }).catch(function (error) {
+                    console.log(error)
+                })
+            },
+            getRecord(){
+                this.$http.post('http://192.168.0.55:8888/record/'+this.$route.query.userid, {id:this.$store.state.user.user._id}).then((res) => {
+                    console.log(res);
+                }).catch(function (error) {
+                    console.log(error)
+                })
+            },
+            creatChatRecord(){
+                this.$http.post('http://192.168.0.55:8888/creatChatRecord/'+this.$route.query.userid, {id:this.$store.state.user.user._id,chatRoomId:this.chatRoomId}).then((res) => {
+                    console.log('!!!!!!!!!!!'+this.chatRoomId)
+                    console.log(res);
+                    this.getRecord();
+                }).catch(function (error) {
+                    console.log(error)
+                })
+            },
+            saveDialog(){
+		let user = window.localStorage.getItem(this.$store.state.user.user._id);
+                let dialog = {
+		    user:{
+		            username:this.toUser.username,
+                            _id:this.$route.query.userid,
+		            pic:this.toUser.pic
+		    },
+                    chatRoomId:this.chatRoomId,
+                    record:[]
+                };
+                if(user){
+                    JSON.parse(user).push(dialog)
+                }else{
+			let data = [];
+			data.push(dialog);
+                    console.log(JSON.stringify(data))
+                    window.localStorage.setItem(this.$store.state.user.user._id,JSON.stringify(data))
+                }
+            }
         },
         components:{
             navbar
@@ -162,6 +222,14 @@
 		font-size:14px;
 		padding: 5px 10px;
 		max-width:80vw;
+	}
+	.dialog_item_tips{
+		width:100%;
+		padding:10px 0;
+		color:#999;
+		text-align: center;
+		font-size:12px;
+		clear:both;
 	}
 	/*对话交互效果*/
 	.dialogItem-enter-active, .dialogItem-leave-active {

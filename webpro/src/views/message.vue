@@ -20,41 +20,43 @@
 				</mu-list-item>
 			</mu-list>
 		</mu-popover>
-		<div class="demo-text" v-if="active === 0">
+		<div v-if="active === 0">
 			<mu-list class="dialog_list">
-				<router-link  v-for="item in dialog" :to="{path:'dialog', query:{ChatRoomId:item.chatRoomId}}" >
-					<mu-list-item avatar button :ripple="true">
+				<router-link :to="{path:'dialog', query:{ChatRoomId:item.chatRoomId || '',userid:item._id}}" tag="div"  v-for="item in dialog">
+					<mu-list-item avatar button :ripple="false" >
 						<mu-list-item-action>
+							<mu-avatar>
+								<img :src="item.user.pic">
+							</mu-avatar>
+						</mu-list-item-action>
+						<mu-list-item-title v-text="item.user.username"></mu-list-item-title>
+						<mu-list-item-action>
+								<mu-icon value="chat_bubble"></mu-icon>
+						</mu-list-item-action>
+					</mu-list-item>
+				</router-link>
+			</mu-list>
+		</div>
+		<div v-if="active === 1">
+			<mu-list class="dialog_list">
+				<router-link :to="{path:'/userDetail'+item._id}"  tag="div"  v-for="item in friends">
+					<mu-list-item avatar button :ripple="false" >
+						<mu-list-item-action to="/userDetail">
 							<mu-avatar>
 								<img :src="item.pic">
 							</mu-avatar>
 						</mu-list-item-action>
 						<mu-list-item-title v-text="item.username"></mu-list-item-title>
 						<mu-list-item-action>
-							<mu-icon value="chat_bubble"></mu-icon>
+							<router-link :to="{path:'dialog', query:{ChatRoomId:item.chatRoomId || '',userid:item._id}}" tag="div">
+								<mu-icon value="chat_bubble"  :to="{path:'dialog', query:{ChatRoomId:item.chatRoomId || ''}}"></mu-icon>
+							</router-link>
 						</mu-list-item-action>
 					</mu-list-item>
 				</router-link>
 			</mu-list>
 		</div>
-		<div class="demo-text" v-if="active === 1">
-			<mu-list class="dialog_list">
-				<router-link  v-for="item in friends" :to="{path:'dialog', query:{ChatRoomId:item.chatRoomId}}" >
-					<mu-list-item avatar button :ripple="true">
-						<mu-list-item-action>
-							<mu-avatar>
-								<img :src="item.pic">
-							</mu-avatar>
-						</mu-list-item-action>
-						<mu-list-item-title v-text="item.username"></mu-list-item-title>
-						<mu-list-item-action>
-							<mu-icon value="chat_bubble"></mu-icon>
-						</mu-list-item-action>
-					</mu-list-item>
-				</router-link>
-			</mu-list>
-		</div>
-		<div class="demo-text" v-if="active === 2">
+		<div v-if="active === 2">
 			<mu-list class="dialog_list">
 				<router-link  v-for="item in group" :to="{path:'dialog', query:{ChatRoomId:item.chatRoomId}}" >
 					<mu-list-item avatar button :ripple="true">
@@ -100,9 +102,13 @@
                 ],
                 dialog:[
                     {
-                        username:'Daath',
-                        pic:'',
-                        chatRoomId:'-n1JLcFjCd7ay26aAAAM'
+                        user:{
+                            username:'',
+                            _id:'',
+                            pic:''
+                        },
+                        chatRoomId:'CbLEVabnVeRaf5y1AAAA',
+                        record:[]
                     }
                 ],
                 group:[
@@ -118,15 +124,26 @@
         created(){
             this.$userLogin();
             this.getFriends();
+            this.getLocalStorageUser();
         },
         methods:{
             getFriends(){
                 this.$http.get(this.getFriendsPath + this.$store.state.user.user._id, {}).then((res) => {
+                    console.log(res.body)
                     this.friends = res.body
                 }).catch(function (error) {
                     console.log(error)
                 })
-            }
+            },
+            getLocalStorageUser(){
+                let user = window.localStorage.getItem(this.$store.state.user.user._id);
+                if(user){
+                    let dialogList = JSON.parse(user);
+                    this.dialog = dialogList;
+                }else{
+                    window.localStorage.setItem(this.$store.state.user.user._id,'');
+                }
+            },
         },
         mounted () {
             this.trigger = this.$refs.button.$el;
