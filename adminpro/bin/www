@@ -34,10 +34,10 @@ io.on('connection', function(socket){
         //返回信息给客户端
         setTimeout(function(){
             let id = obj.id;
-            let user2 = obj.userid2;
             io.emit("msg"+id, obj);
             console.log('the websokcet message is'+obj.text);
             console.log('open connect:'+obj.id)
+            console.log('userid:'+obj.userid)
         },0);
     });
 });

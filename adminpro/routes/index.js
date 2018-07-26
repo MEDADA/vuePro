@@ -67,50 +67,40 @@ router.get('/getUserId/:id',function (req,res) {
         res.send(user)
     });
 });
-//查找通道是否存在
-router.post('/record/:id',function (req,res,next) {
-    let id = req.params.id;
-    let userid = req.body.id;
-    ChattingRecords.find({ "user": { $elemMatch: { "userid": id,"userid": userid} } },function (err,json) {
-        if(err) throw err;
-        res.send(json);
-    })
-});
 //创建保存通道
 router.post('/creatChatRecord/:id',function (req,res,next) {
     let userid2 = req.params.id;
     let userid1 = req.body.id;
     let chatRoomId = req.body.chatRoomId;
-    let item = new ChattingRecords({
-        chatRoomId : chatRoomId,
-        user:[
-            {
-                userid:userid1,
-                pic:String,
-                username:String,
-            },{
-                userid:userid2,
-                pic:String,
-                username:String,
-            }
-        ],
-        record:[
-            {
-                id:userid1,
-                text:'这是userid1说的第一句话'
-            },{
-                id:userid1,
-                text:'这是userid1说的第二句话'
-            },{
-                id:userid2,
-                text:'这是userid2说的第一句话'
-            }
-        ]
-    });
-    item.save(function (err,json) {
+    ChattingRecords.find({user:{$all:[userid1,userid2]}},function (err,json) {
         if(err) throw err;
-        res.send(json)
-    });
+        console.log(json)
+            if(json.length == 0 && chatRoomId){
+                    let item = new ChattingRecords({
+                        chatRoomId : chatRoomId,
+                        user:[userid1,userid2],
+                        record:[
+                            {
+                                id:userid1,
+                                text:'这是userid1说的第一句话'
+                            },{
+                                id:userid1,
+                                text:'这是userid1说的第二句话'
+                            },{
+                                id:userid2,
+                                text:'这是userid2说的第一句话'
+                            }
+                        ]
+                    });
+                    item.save(function (err2,json2) {
+                        if(err2) throw err2;
+                        res.send(json2)
+                    });
+            }else{
+                res.send(json)
+            }
+    })
+
 });
 //添加好友
 router.post('/addFriend/:id',function (req,res) {

@@ -48,8 +48,8 @@
 						</mu-list-item-action>
 						<mu-list-item-title v-text="item.username"></mu-list-item-title>
 						<mu-list-item-action>
-							<router-link :to="{path:'dialog', query:{ChatRoomId:item.chatRoomId || '',userid:item._id}}" tag="div">
-								<mu-icon value="chat_bubble"  :to="{path:'dialog', query:{ChatRoomId:item.chatRoomId || ''}}"></mu-icon>
+							<router-link :to="{path:'dialog', query:{userid:item._id}}" tag="div">
+								<mu-icon value="chat_bubble"></mu-icon>
 							</router-link>
 						</mu-list-item-action>
 					</mu-list-item>
@@ -107,7 +107,7 @@
                             _id:'',
                             pic:''
                         },
-                        chatRoomId:'CbLEVabnVeRaf5y1AAAA',
+                        chatRoomId:'',
                         record:[]
                     }
                 ],
@@ -124,7 +124,7 @@
         created(){
             this.$userLogin();
             this.getFriends();
-            this.getLocalStorageUser();
+//            this.getLocalStorageUser();
         },
         methods:{
             getFriends(){
@@ -135,15 +135,15 @@
                     console.log(error)
                 })
             },
-            getLocalStorageUser(){
-                let user = window.localStorage.getItem(this.$store.state.user.user._id);
-                if(user){
-                    let dialogList = JSON.parse(user);
-                    this.dialog = dialogList;
-                }else{
-                    window.localStorage.setItem(this.$store.state.user.user._id,'');
-                }
-            },
+//            getLocalStorageUser(){
+//                let user = window.localStorage.getItem(this.$store.state.user.user._id);
+//                if(user){
+//                    let dialogList = JSON.parse(user);
+//                    this.dialog = dialogList;
+//                }else{
+//                    window.localStorage.setItem(this.$store.state.user.user._id,'');
+//                }
+//            },
         },
         mounted () {
             this.trigger = this.$refs.button.$el;

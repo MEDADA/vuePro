@@ -3,14 +3,16 @@
 
 		<navbar>{{toUser.username}}</navbar>
 		<div class="dialog_container">
-			<div class="dialog_item_tips">已发起对XXX聊天 连接通道为 : {{chatRoomId}}</div>
+			<div class="dialog_item_tips">已连接通道为 : {{chatRoomId}}</div>
 			<transition-group tag="div" name="dialogItem">
 				<div class="dialog_item" :class="{self:msg.userid == $store.state.user.user._id}" v-for="(msg,ind) in message" :key="ind">
-					<div class="dialog_item_pic" v-if="msg.pic">
-						<img :src="msg.pic" alt="">
+					<div class="dialog_item_pic">
+						<img :src="$store.state.user.user.pic" alt="" v-if="msg.userid == $store.state.user.user._id">
+						<img :src="toUser.pic" alt="" v-else-if="msg.userid == toUser._id">
 					</div>
 					<div class="dialog_item_info">
-						<div class="dialog_item_name" v-text="msg.username" v-if="msg.username"></div>
+						<div class="dialog_item_name" v-if="msg.userid == $store.state.user.user._id" v-text="$store.state.user.user.username"></div>
+						<div class="dialog_item_name" v-else-if="msg.userid == toUser._id" v-text="toUser.username"></div>
 						<div class="dialog_item_text" v-text="msg.text" v-if="msg.text"></div>
 					</div>
 				</div>
@@ -18,7 +20,9 @@
 		</div>
 		<div class="input_box">
 			<mu-text-field v-model="text"></mu-text-field>
-			<mu-button color="primary" @click="submitMsg()" class="submit_btn">发送</mu-button>
+			<mu-button icon color="primary"  @click="submitMsg()"  class="submit_btn">
+				<mu-icon value="send"></mu-icon>
+			</mu-button>
 		</div>
 	</div>
 </template>
@@ -36,40 +40,27 @@
                 toUser:{
 
                 },
-                connect:false
+                connect:false,
+                talkUser:''
             }
         },
         created(){
             this.$userLogin();
-            console.log(this.$route.query.ChatRoomId);
+        },
+        mounted(){
             this.$socket.emit('connect');
-//            发送chatid 给friendList chatid
-
         },
         sockets:{
 		connect: function(){
-		    if(!this.connect){
-			console.log('socket connected')
-		        if(!this.$route.query.ChatRoomId || this.$route.query.ChatRoomId !== null){
-                            this.chatRoomId = this.$socket.id;
-		        } else{
-                            this.chatRoomId = this.$route.query.ChatRoomId;
-		        }
-		        console.log('??????????????'+this.chatRoomId)
+		    if(!this.connect && this.$socket.id && this.$socket.id !== 'null'){  //绝对连接，判断连接状态是否成功，随机ID是否生成，并且不为null
                         this.connect = true;
-			if(this.chatRoomId){
-                            this.$socket.on('msg'+this.chatRoomId,(result) => {
-                                let obj = {
-	                                text : result.text,
-	                                id : result.id,
-	                            }
-                                this.message.push(obj)
-                            });
-			}
-                        this.getUserData();
+                        console.log('socket connected : ' + this.chatRoomId)
+//		        关于 $socket.id  从其他router进来将为 null  需要再 mounted后赋值
+		        this.chatRoomId = this.$socket.id;  // question this.$socket.id 有几率为空
+		        console.log(this.$socket.id)
 
-
-                        this.creatChatRecord();
+                        this.getUserData();  //得到对方用户信息
+                        this.creatChatRecord();  //创建聊天通道，如果第一次打开将新建通道
                     }
 		},
 		customEmit: function(val){
@@ -79,61 +70,67 @@
         methods: {
 
             submitMsg() {
-                let obj = {
-                    text:this.text,
-                    userid:this.$store.state.user.user._id,
-                    userid2:this.$route.query.userid,
-                    id:this.chatRoomId,
-                    time:{
-                        detault:Date.now()
-                    }
-                };
-                this.$socket.emit('msg',obj);
-                this.text = '' ;
+                if(this.text !== ''){
+	                let obj = {
+	                    text:this.text,
+	                    userid:this.$store.state.user.user._id,
+	                    id:this.chatRoomId,
+	                    time:{
+	                        detault:Date.now()
+	                    }
+	                };
+	                this.$socket.emit('msg',obj);
+	                this.text = '' ;
+                }
             },
             getUserData(){
                 this.$http.get('http://192.168.0.55:8888/getUserId/'+this.$route.query.userid, {}).then((res) => {
-                    console.log(res.body);
                     this.toUser = res.body;
                     this.saveDialog();
-                }).catch(function (error) {
-                    console.log(error)
-                })
-            },
-            getRecord(){
-                this.$http.post('http://192.168.0.55:8888/record/'+this.$route.query.userid, {id:this.$store.state.user.user._id}).then((res) => {
-                    console.log(res);
+
                 }).catch(function (error) {
                     console.log(error)
                 })
             },
             creatChatRecord(){
-                this.$http.post('http://192.168.0.55:8888/creatChatRecord/'+this.$route.query.userid, {id:this.$store.state.user.user._id,chatRoomId:this.chatRoomId}).then((res) => {
-                    console.log('!!!!!!!!!!!'+this.chatRoomId)
-                    console.log(res);
-                    this.getRecord();
-                }).catch(function (error) {
-                    console.log(error)
-                })
+                if(this.chatRoomId){
+	                this.$http.post('http://192.168.0.55:8888/creatChatRecord/'+this.$route.query.userid, {id:this.$store.state.user.user._id,chatRoomId:this.chatRoomId}).then((res) => {
+	                    console.log(res);
+	                    var chatRoomId = res.body[0].chatRoomId;
+	                    if(chatRoomId){
+	                        this.chatRoomId = chatRoomId;
+	                    }
+	                    this.$socket.on('msg'+this.chatRoomId,(result) => {
+	                        let obj = {
+	                            text : result.text,
+	                            id : result.id,
+	                            userid:result.userid
+	                        };
+	                        this.message.push(obj)
+	                    });
+	                }).catch(function (error) {
+	                    console.log(error)
+	                })
+                }
             },
             saveDialog(){
-		let user = window.localStorage.getItem(this.$store.state.user.user._id);
+                let user = window.localStorage.getItem(this.$store.state.user.user._id);
                 let dialog = {
-		    user:{
-		            username:this.toUser.username,
-                            _id:this.$route.query.userid,
-		            pic:this.toUser.pic
-		    },
-                    chatRoomId:this.chatRoomId,
-                    record:[]
+                    user: {
+                        username: this.toUser.username,
+                        _id: this.$route.query.userid,
+                        pic: this.toUser.pic
+                    },
+                    chatRoomId: this.chatRoomId,
+                    record: []
                 };
-                if(user){
+                if (user) {
                     JSON.parse(user).push(dialog)
-                }else{
-			let data = [];
-			data.push(dialog);
+                } else {
+                    let data = [];
+                    data.push(dialog);
                     console.log(JSON.stringify(data))
-                    window.localStorage.setItem(this.$store.state.user.user._id,JSON.stringify(data))
+                    window.localStorage.setItem(this.$store.state.user.user._id, JSON.stringify(data))
                 }
             }
         },
@@ -152,15 +149,17 @@
 		height:50px;
 		overflow:hidden;
 		background-color: #ccc;
+		display:flex;
 	}
 	.input_box .mu-input{
 		margin-bottom:0;
 		width:calc(100% - 35vw);
 		min-height:50px;
 		margin-left:5vw;
+		flex:1;
 	}
 	.submit_btn{
-		margin:8px 5vw 0 ;
+		margin:0 5vw;
 	}
 	.input_box input{
 
