@@ -30,11 +30,17 @@
 				<mu-list-item-title>我的发布</mu-list-item-title>
 			</mu-list-item>
 			<mu-divider></mu-divider>
+			<mu-list-item button :ripple="true" @click="clearCache()">
+				<mu-list-item-action>
+					<mu-icon value="clear_all"></mu-icon>
+				</mu-list-item-action>
+				<mu-list-item-title>清理缓存</mu-list-item-title>
+			</mu-list-item>
 			<mu-list-item button :ripple="true" @click="$userLoginOut()">
 				<mu-list-item-action>
 					<mu-icon value="power_settings_new"></mu-icon>
 				</mu-list-item-action>
-				<mu-list-item-title>Quit</mu-list-item-title>
+				<mu-list-item-title>退出登录</mu-list-item-title>
 			</mu-list-item>
 		</mu-list>
 		</mu-container>
@@ -71,7 +77,12 @@
                 this.color.timer = setTimeout(() => {
                     this.color.open = false;
                 }, this.color.timeout);
-            }
+            },clearCache(){
+                let user = window.localStorage.getItem(this.$store.state.user.user._id);
+	        if(user){
+                    window.localStorage.removeItem(this.$store.state.user.user._id);
+	        }
+            },
         },
         components:{
 

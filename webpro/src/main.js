@@ -29,6 +29,9 @@ const store = new Vuex.Store({
         login(state,user){
             state.user = user ;
             state.user.login = true ;
+        },
+        userOut(state){
+            state.user.login = false;
         }
     }
 });

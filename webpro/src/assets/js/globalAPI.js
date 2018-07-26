@@ -46,14 +46,15 @@ GlobalAPI.install = function (Vue, options) {
         }
     }
     Vue.prototype.$userLoginOut = function () {
-        let localStorageUser = JSON.parse(window.localStorage.getItem('userData'));
+        let localStorageUser = window.localStorage.getItem('userData');
         let vuexUser = this.$store.state.user;
             if(localStorageUser){
                 window.localStorage.removeItem('userData');
             }
             if(vuexUser){
-                this.$store.commit('login',{'login':false});
+                this.$store.commit('userOut');
             }
+
     }
     Vue.prototype.$goBack = function () {
         this.$router.go(-1);  //后退
