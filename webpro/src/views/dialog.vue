@@ -56,7 +56,7 @@
                         this.connect = true;
                         console.log('socket connected : ' + this.chatRoomId)
 //		        关于 $socket.id  从其他router进来将为 null  需要再 mounted后赋值
-		        this.chatRoomId = this.$socket.id;  // question this.$socket.id 有几率为空
+		        this.chatRoomId = this.$socket.id;
 		        console.log(this.$socket.id)
 
                         this.getUserData();  //得到对方用户信息
@@ -70,7 +70,7 @@
         methods: {
 
             submitMsg() {
-                if(this.text !== ''){
+                if(this.text.replace(/\s*/g,'') !== ''){
 	                let obj = {
 	                    text:this.text,
 	                    userid:this.$store.state.user.user._id,
@@ -79,6 +79,7 @@
 	                        detault:Date.now()
 	                    }
 	                };
+                        this.$http.post
 	                this.$socket.emit('msg',obj);
 	                this.text = '' ;
                 }
@@ -100,7 +101,7 @@
 	                    if(chatRoomId){
 	                        this.chatRoomId = chatRoomId;
 	                    }
-	                    this.$socket.on('msg'+this.chatRoomId,(result) => {
+	                    this.$socket.on('msg'+this.chatRoomId,(result) => {  // 实时接受数据
 	                        let obj = {
 	                            text : result.text,
 	                            id : result.id,
@@ -129,8 +130,8 @@
                 } else {
                     let data = [];
                     data.push(dialog);
-                    console.log(JSON.stringify(data))
-                    window.localStorage.setItem(this.$store.state.user.user._id, JSON.stringify(data))
+                    console.log(JSON.stringify(data));
+                    window.localStorage.setItem(this.$store.state.user.user._id, JSON.stringify(data));
                 }
             }
         },

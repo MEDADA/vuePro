@@ -22,14 +22,14 @@
 		</mu-popover>
 		<div v-if="active === 0">
 			<mu-list class="dialog_list">
-				<router-link :to="{path:'dialog', query:{ChatRoomId:item.chatRoomId || '',userid:item._id}}" tag="div"  v-for="item in dialog">
+				<router-link :to="{path:'dialog', query:{userid:item._id}}" tag="div"  v-for="item in dialog">
 					<mu-list-item avatar button :ripple="false" >
 						<mu-list-item-action>
 							<mu-avatar>
-								<img :src="item.user.pic">
+								<img :src="item.username">
 							</mu-avatar>
 						</mu-list-item-action>
-						<mu-list-item-title v-text="item.user.username"></mu-list-item-title>
+						<mu-list-item-title v-text="item.pic"></mu-list-item-title>
 						<mu-list-item-action>
 								<mu-icon value="chat_bubble"></mu-icon>
 						</mu-list-item-action>
@@ -102,13 +102,9 @@
                 ],
                 dialog:[
                     {
-                        user:{
-                            username:'',
-                            _id:'',
-                            pic:''
-                        },
-                        chatRoomId:'',
-                        record:[]
+                        username:'friends1',
+                        pic:'',
+                        _id:'',
                     }
                 ],
                 group:[
@@ -122,12 +118,12 @@
             }
         },
         created(){
-            this.$userLogin();
-            this.getFriends();
-//            this.getLocalStorageUser();
+            this.$userLogin();  //登录判断
+            this.getFriends(); //获取好友列表
+            this.getLocalStorageUser(); //在用户缓存中获取  对话
         },
         methods:{
-            getFriends(){
+            getFriends(){  //获取好友列表
                 this.$http.get(this.getFriendsPath + this.$store.state.user.user._id, {}).then((res) => {
                     console.log(res.body)
                     this.friends = res.body
@@ -135,15 +131,13 @@
                     console.log(error)
                 })
             },
-//            getLocalStorageUser(){
-//                let user = window.localStorage.getItem(this.$store.state.user.user._id);
-//                if(user){
-//                    let dialogList = JSON.parse(user);
-//                    this.dialog = dialogList;
-//                }else{
-//                    window.localStorage.setItem(this.$store.state.user.user._id,'');
-//                }
-//            },
+            getLocalStorageUser(){   //在用户缓存中获取  对话
+                let user = window.localStorage.getItem(this.$store.state.user.user._id);  // 得到缓存用户信息
+                if(user){
+                    let dialogList = JSON.parse(user);
+                    this.dialog = dialogList;
+                }
+            },
         },
         mounted () {
             this.trigger = this.$refs.button.$el;

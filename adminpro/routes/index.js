@@ -75,22 +75,11 @@ router.post('/creatChatRecord/:id',function (req,res,next) {
     ChattingRecords.find({user:{$all:[userid1,userid2]}},function (err,json) {
         if(err) throw err;
         console.log(json)
-            if(json.length == 0 && chatRoomId){
+            if(json.length == 0 && chatRoomId){  //是否存在历史通道
                     let item = new ChattingRecords({
-                        chatRoomId : chatRoomId,
-                        user:[userid1,userid2],
-                        record:[
-                            {
-                                id:userid1,
-                                text:'这是userid1说的第一句话'
-                            },{
-                                id:userid1,
-                                text:'这是userid1说的第二句话'
-                            },{
-                                id:userid2,
-                                text:'这是userid2说的第一句话'
-                            }
-                        ]
+                        chatRoomId : chatRoomId,  //聊天链接ID
+                        user:[userid1,userid2],  //用户ID
+                        record:[]  //聊天记录
                     });
                     item.save(function (err2,json2) {
                         if(err2) throw err2;
@@ -100,7 +89,6 @@ router.post('/creatChatRecord/:id',function (req,res,next) {
                 res.send(json)
             }
     })
-
 });
 //添加好友
 router.post('/addFriend/:id',function (req,res) {
@@ -117,6 +105,9 @@ router.post('/addFriend/:id',function (req,res) {
         if(err) throw err;
         friend.username = json.username;
         friend.pic = json.pic;
+
+
+        //如果双方同意添加好友成功操作
         User.update({_id:user._id},{$push:{friendList:friend}},function (err,json) { //更新本人好友列表
             if(err) throw err;
             res.send(json)
@@ -127,6 +118,16 @@ router.post('/addFriend/:id',function (req,res) {
         })
     });
 });
+//用户dialog发送消息
+router.post('/dialogMessage',function(req,res,){
+    let chatRoomId = req.body.chatRoomId;
+    let userId = req.body.userid;
+    let record = req.body.record;
+    ChattingRecords.findOne({chatRoomId:chatRoomId},function (err,json) {
+        if(err) throw err;
+        res.send(json)
+    })
+})
 //获取分类
 router.get('/category/:kind',function (req,res,next) {
     let kind = req.params.kind;
